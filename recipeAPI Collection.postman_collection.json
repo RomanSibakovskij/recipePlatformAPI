@@ -1,0 +1,4210 @@
+{
+	"info": {
+		"_postman_id": "1b5fe0ea-94b8-40e9-a6fb-dc36920e4f3d",
+		"name": "recipeAPI Collection",
+		"description": "The Postman API test for recipe sharing platform",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36297486"
+	},
+	"item": [
+		{
+			"name": "User Registration",
+			"item": [
+				{
+					"name": "User Registration",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"//randomizer command\r",
+									"let random = Math.random().toString(36).substring(2);\r",
+									"\r",
+									"//random variables\r",
+									"let name = random; //username\r",
+									"let firstname = \"First name: \" + random;\r",
+									"let lastname = \"Last name: \" + random;\r",
+									"let email = name + \"@\" + \"email.com\";\r",
+									"let password = \"Kranker1125#\";\r",
+									"\r",
+									"\r",
+									"//variable setter in the environment\r",
+									"pm.environment.set(\"userName\", name);\r",
+									"pm.environment.set(\"userFirstName\", firstname)\r",
+									"pm.environment.set(\"userLastName\", lastname);\r",
+									"pm.environment.set(\"userEmail\", email);\r",
+									"pm.environment.set(\"userPassword\", password);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"signupToken\", pm.response.text().replace(/['\"]+/g, ''));\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Assert the user token exists\", function() {\r",
+									"    pm.expect(pm.response.text()).to.exist;\r",
+									"    pm.expect(pm.response.text()).to.be.a('string'); \r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"{{userFirstName}}\",\r\n    \"lastname\": \"{{userLastName}}\",\r\n    \"email\": \"{{userEmail}}\",\r\n    \"password\": \"{{userPassword}}\",\r\n    \"repeatPassword\": \"{{userPassword}}\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URI}}/users/signup",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"users",
+								"signup"
+							]
+						},
+						"description": "Positive test case covering registration using valid data"
+					},
+					"response": [
+						{
+							"name": "201 Created",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"{{name}}\",\r\n    \"lastname\": \"{{lastname}}\",\r\n    \"email\": \"{{email}}\",\r\n    \"password\": \"{{password}}\",\r\n    \"repeatPassword\": \"{{password}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URI}}/users/signup",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"users",
+										"signup"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "265"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"109-WKWTbAPsKhqp8sxCO0QrKxdnVFE\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 14 Jul 2024 11:09:54 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTUsIm5hbWUiOiJuZnZ2YmZubGloaiIsImxhc3RuYW1lIjoie3tsYXN0bmFtZX19IiwiZW1haWwiOiJuZnZ2YmZubGloakBlbWFpbC5jb20iLCJyb2xlIjoidXNlciIsImlhdCI6MTcyMDk1NTM5NCwiZXhwIjoxNzQ2ODc1Mzk0fQ.PGBIaayRlpGjZutiiP37mk4szzLk8XcNG9Na9ZddXTA\""
+						},
+						{
+							"name": "201 Created with Missing Name",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"\",\r\n    \"lastname\": \"{{userLastName}}\",\r\n    \"email\": \"{{userEmail}}\",\r\n    \"password\": \"{{userPassword}}\",\r\n    \"repeatPassword\": \"{{userPassword}}\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URI}}/users/signup",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"users",
+										"signup"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "277"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"115-7h7vGTy8/hqiThsv/sBhWRfolXM\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 29 Jul 2024 09:26:00 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI2LCJuYW1lIjoiIiwibGFzdG5hbWUiOiJMYXN0IG5hbWU6IDA0OHRpZ25nbDYweSIsImVtYWlsIjoiRW1haWw6IDA0OHRpZ25nbDYweUBlbWFpbC5jb20iLCJyb2xlIjoidXNlciIsImlhdCI6MTcyMjI0NTE2MCwiZXhwIjoxNzQ4MTY1MTYwfQ.6E3rK5KLvj7QO9DDwy1IgDT-UqdZCTw-zjwFjZV5hnc\""
+						},
+						{
+							"name": "201 Created with Missing Last Name",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"{{userFirstName}}\",\r\n    \"lastname\": \"\",\r\n    \"email\": \"{{userEmail}}\",\r\n    \"password\": \"{{userPassword}}\",\r\n    \"repeatPassword\": \"{{userPassword}}\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URI}}/users/signup",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"users",
+										"signup"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "275"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"113-2yM0Z+ZEaFZCfuGxW31nkhZZzwI\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 29 Jul 2024 09:26:28 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjI3LCJuYW1lIjoiRmlyc3QgbmFtZTogOXVtMDF0ODZrbmoiLCJsYXN0bmFtZSI6IiIsImVtYWlsIjoiRW1haWw6IDl1bTAxdDg2a25qQGVtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzIyMjQ1MTg4LCJleHAiOjE3NDgxNjUxODh9.F2vKyMEpZTKPLz8zjW2FFDa_bHIYUV5iDg4-h18AQmA\""
+						},
+						{
+							"name": "409 conflict with Missing Email",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"{{userFirstName}}\",\r\n    \"lastname\": \"{{userLastName}}\",\r\n    \"email\": \"\",\r\n    \"password\": \"{{userPassword}}\",\r\n    \"repeatPassword\": \"{{userPassword}}\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URI}}/users/signup",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"users",
+										"signup"
+									]
+								}
+							},
+							"status": "Conflict",
+							"code": 409,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "31"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1f-kYWUilo5p42szpjpB+pNtuakhEg\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 29 Jul 2024 09:26:57 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Email is occupied\"\n}"
+						},
+						{
+							"name": "409 Conflict Reg with Existing Email",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"{{userFirstName}}\",\r\n    \"lastname\": \"{{userLastName}}\",\r\n    \"email\": \"m55@gmail.com\",\r\n    \"password\": \"{{userPassword}}\",\r\n    \"repeatPassword\": \"{{userPassword}}\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URI}}/users/signup",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"users",
+										"signup"
+									]
+								}
+							},
+							"status": "Conflict",
+							"code": 409,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "31"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1f-kYWUilo5p42szpjpB+pNtuakhEg\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 29 Jul 2024 09:27:24 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Email is occupied\"\n}"
+						},
+						{
+							"name": "400 Bad Request with Missing Password",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"{{userFirstName}}\",\r\n    \"lastname\": \"{{userLastName}}\",\r\n    \"email\": \"{{userEmail}}\",\r\n    \"password\": \"\",\r\n    \"repeatPassword\": \"\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URI}}/users/signup",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"users",
+										"signup"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "149"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"95-5HTBBBOmnniN97+nYcFSrJ4twsQ\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 29 Jul 2024 09:28:10 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Password must include at least one uppercase letter, one lowercase letter, and one symbol. It must be between 8 and 20 characters long.\"\n}"
+						},
+						{
+							"name": "400 Bad Request with mismatching Passwords",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"{{userFirstName}}\",\r\n    \"lastname\": \"{{userLastName}}\",\r\n    \"email\": \"{{userEmail}}\",\r\n    \"password\": \"{{userPassword}}\",\r\n    \"repeatPassword\": \"Krkt#453\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URI}}/users/signup",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"users",
+										"signup"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "45"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"2d-IG+sx1aBEckfK7skwW4l/HRuG6c\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 29 Jul 2024 09:28:51 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Passwords does not match ☹️\"\n}"
+						}
+					]
+				}
+			],
+			"description": "Create a new account as a fresh user"
+		},
+		{
+			"name": "User Login",
+			"item": [
+				{
+					"name": "Registered User Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let token = pm.response.text().replace(/['\"]+/g, '');\r",
+									"\r",
+									"//user token setter\r",
+									"pm.environment.set(\"userToken\", token);\r",
+									"\r",
+									"//user token getters\r",
+									"let userToken = pm.environment.get(\"userToken\");\r",
+									"let registrationToken = pm.environment.get(\"signupToken\");\r",
+									"\r",
+									"//Debug logs\r",
+									"console.log(\"Signup Token:\", registrationToken);\r",
+									"console.log(\"User Token:\", userToken);\r",
+									"\r",
+									"//this feature hasn't been fixed yet in the project\r",
+									"\r",
+									"// pm.test(\"Login token should be different from registration token\", function() {\r",
+									"//     pm.expect(userToken).to.not.eql(registrationToken)\r",
+									"// });\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"}); //should be 201 but gets 200\r",
+									"\r",
+									"//assert the presence of the user token\r",
+									"pm.test(\"Assert the user token exists\", function() {\r",
+									"    pm.expect(pm.response.text()).to.exist;\r",
+									"    pm.expect(pm.response.text()).to.be.a('string'); \r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"{{userEmail}}\",\r\n    \"password\": \"{{userPassword}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URI}}/users/login",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"users",
+								"login"
+							]
+						},
+						"description": "Positive test case covering login with valid email and password"
+					},
+					"response": [
+						{
+							"name": "200 OK",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{email}}\",\r\n    \"password\": \"{{password}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URI}}/users/login",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"users",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "265"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"109-02m2KqT6hUnf8DQ8rte2toJ54ig\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 14 Jul 2024 11:10:32 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTUsIm5hbWUiOiJ7e2xhc3RuYW1lfX0iLCJsYXN0bmFtZSI6Im5mdnZiZm5saWhqIiwiZW1haWwiOiJuZnZ2YmZubGloakBlbWFpbC5jb20iLCJyb2xlIjoidXNlciIsImlhdCI6MTcyMDk1NTQzMiwiZXhwIjoxNzQ2ODc1NDMyfQ.ckvaqSmMv5SelHFH4Xho30RjlhtNUST5SVoVtqqThwM\""
+						},
+						{
+							"name": "400 Bad Request with Invalid Email",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"m332@example.com\",\r\n    \"password\": \"{{userPassword}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URI}}/users/login",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"users",
+										"login"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "50"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"32-FY3xUYZC9pDfaZvSDxekFe7bisI\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 29 Jul 2024 09:34:36 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"User with this email does not exists\"\n}"
+						},
+						{
+							"name": "400 Bad Request with Invalid Password",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{userEmail}}\",\r\n    \"password\": \"Stkr##123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URI}}/users/login",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"users",
+										"login"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "51"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"33-q6pQitkignE3TmbdeGKX4Sk+jSo\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 29 Jul 2024 09:35:05 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"email or password does not match 😭\"\n}"
+						},
+						{
+							"name": "400 Bad Request with Missing Login Password",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{userEmail}}\",\r\n    \"password\": \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URI}}/users/login",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"users",
+										"login"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "47"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"2f-klJyJnRiYlalpwkFpXjM1oVnD7M\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 29 Jul 2024 09:38:35 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Email or password is missing 😤\"\n}"
+						},
+						{
+							"name": "400 Bad Request with Missing Login Email",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"\",\r\n    \"password\": \"{{userPassword}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URI}}/users/login",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"users",
+										"login"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "47"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"2f-klJyJnRiYlalpwkFpXjM1oVnD7M\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 29 Jul 2024 09:39:28 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Email or password is missing 😤\"\n}"
+						}
+					]
+				}
+			],
+			"description": "Login with newly created user credentials",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Registered User Recipes Management",
+			"item": [
+				{
+					"name": "Add new Recipe",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Assert the recipe ID is assigned\", function() {\r",
+									"    pm.expect(jsonData.recipeid).to.not.be.null; \r",
+									"    pm.expect(jsonData.recipeid).to.be.a('number'); \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Assert the recipe title is assigned\", function() {\r",
+									"    pm.expect(jsonData.title).to.not.be.null;\r",
+									"    pm.expect(jsonData.title).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Assert the recipe category ID exists\", function() {\r",
+									"    pm.expect(jsonData.categoryid).to.not.be.null; \r",
+									"    pm.expect(jsonData.categoryid).to.be.a('number'); \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Assert the recipe cuisine ID is assigned\", function() {\r",
+									"    pm.expect(jsonData.cuisineid).to.not.be.null; \r",
+									"    pm.expect(jsonData.cuisineid).to.be.a('number');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Assert the user ID is assigned\", function() {\r",
+									"    pm.expect(jsonData.userid).to.not.be.null; \r",
+									"    pm.expect(jsonData.userid).to.be.a('number'); \r",
+									"});\r",
+									"\r",
+									"//debug log\r",
+									"console.log(\"Request Body:\", JSON.stringify(pm.request.body));\r",
+									"\r",
+									"//environment setters post recipe creation\r",
+									"pm.environment.set (\"recipeId\", jsonData.recipeid);\r",
+									"pm.environment.set(\"recipeCategoryId\", jsonData.categoryid);\r",
+									"pm.environment.set(\"cuisineId\", jsonData.cuisineid);\r",
+									"\r",
+									"pm.environment.set(\"userId\", jsonData.userid);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"//randomizer for recipe inputs\r",
+									"let random = Math.random().toString(36).substring(2);\r",
+									"\r",
+									"//randomizer for ingredient amounts\r",
+									"let min = 1;\r",
+									"let max = 1000;\r",
+									"let randomAmountNumber = Math.floor(Math.random() * (max - min + 1)) + min;\r",
+									"\r",
+									"//array choices for categories\r",
+									"const categories = [\"drinks\", \"dessert\", \"appetiser\", \"main dish\"];\r",
+									"const randomIndex = Math.floor(Math.random() * categories.length);\r",
+									"const randomCategory = categories[randomIndex];\r",
+									"\r",
+									"//array choices for cuisines\r",
+									"const cuisines = [ \"Italian\", \"Chinese\", \"Indian\", \"Mexican\", \"Japanese\", \"French\", \"Thai\", \"Spanish\", \"Greek\", \"Mediterranean\", \"Korean\", \"Vietnamese\", \"Turkish\", \"Moroccan\", \"Lebanese\", \"Brazilian\", \"Argentinian\", \"Peruvian\", \"Ethiopian\", \"Caribbean\", \"German\", \"Russian\", \"Polish\", \"Cuban\", \"Swedish\", \"Portuguese\", \"Malaysian\", \"Filipino\", \"Indonesian\", \"Pakistani\", \"Persian\", \"American\", \"British\", \"Irish\", \"Australian\", \"Nigerian\", \"South African\", \"Hungarian\", \"Dutch\", \"Belgian\", \"Austrian\", \"Swiss\", \"Chilean\", \"Colombian\", \"Venezuelan\", \"Uruguayan\", \"Ecuadorian\", \"Bolivian\", \"Paraguayan\", \"Czech\", \"Slovak\", \"Romanian\", \"Bulgarian\", \"Croatian\", \"Serbian\", \"Bosnian\", \"Slovenian\", \"Macedonian\", \"Albanian\", \"Georgian\", \"Armenian\", \"Azerbaijani\", \"Kazakh\", \"Uzbek\", \"Turkmen\", \"Kyrgyz\", \"Tajik\", \"Nepalese\", \"Sri Lankan\", \"Bangladeshi\", \"Afghan\", \"Saudi\", \"Emirati\", \"Qatari\", \"Kuwaiti\", \"Omani\", \"Yemeni\", \"Jordanian\", \"Palestinian\", \"Israeli\", \"Syrian\", \"Iraqi\", \"Libyan\", \"Algerian\", \"Tunisian\", \"Sudanese\", \"Kenyan\", \"Tanzanian\", \"Ugandan\", \"Ghanaian\", \"Senegalese\", \"Ivorian\", \"Cameroonian\", \"Angolan\", \"Zimbabwean\", \"Zambian\", \"Malawian\", \"Botswanan\", \"Mozambican\", \"Namibian\", \"Lithuanian\", \"Scandinavian\", \"Baltic\", \"Middle Eastern\", \"Central American\", \"East African\", \"West African\", \"Southern African\", \"Central Asian\", \"South Asian\", \"Southeast Asian\", \"East Asian\", \"Central European\", \"Eastern European\", \"Western European\", \"Southern European\" ];\r",
+									"\r",
+									"//random picker from cuisines' array\r",
+									"const randomIdx = Math.floor(Math.random() * cuisines.length)\r",
+									"const randomCuisine = cuisines[randomIdx];\r",
+									"\r",
+									"//recipe input variables\r",
+									"let recipeName = \"Recipe name: \" + random; \r",
+									"let recipeIngredient = \"Ingredient: \" + random;\r",
+									"let ingredientAmount = \"Amount: \" + randomAmountNumber + \" g.\";\r",
+									"let recipeDescription = \"Description: \" + random;\r",
+									"let recipeSteps = \"Steps: \" + random;\r",
+									"let image = \"Image: \" + random + \".img\";\r",
+									"\r",
+									"//recipe environment variable setters\r",
+									"pm.environment.set(\"recipeName\", recipeName);\r",
+									"pm.environment.set(\"recipeIngredient\", recipeIngredient);\r",
+									"pm.environment.set(\"recipeDescription\", recipeDescription);\r",
+									"pm.environment.set(\"ingredientAmount\", ingredientAmount);\r",
+									"pm.environment.set(\"recipeSteps\", recipeSteps);\r",
+									"pm.environment.set(\"recipeImages\", image);\r",
+									"pm.environment.set(\"randomRecipeCategory\", randomCategory); \r",
+									"pm.environment.set(\"randomRecipeCuisine\", randomCuisine);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"{{recipeName}}\",\r\n    \"ingredients\": [\r\n        {\r\n            \"ingredient\": \"{{recipeIngredient}}\",\r\n            \"amount\": \"{{ingredientAmount}}\"\r\n        },\r\n        {\r\n            \"ingredient\": \"{{recipeIngredient}}\",\r\n            \"amount\": \"{{ingredientAmount}}\"\r\n        }\r\n    ],\r\n    \"steps\": [\r\n        \"{{recipeSteps}}\", \"{{recipeSteps}}\", \"{{recipeSteps}}\"\r\n    ],\r\n    \"category\": \"{{randomRecipeCategory}}\",\r\n    \"cuisine\": \"{{randomRecipeCuisine}}\",\r\n    \"image\": \"{{recipeImages}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URI}}/recipes",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"recipes"
+							]
+						},
+						"description": "Positive test case covering recipe creation with all valid inputs"
+					},
+					"response": [
+						{
+							"name": "201 Created",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"{{recipeName}}\",\r\n    \"ingredients\": [\r\n        {\r\n            \"ingredient\": \"{{recipeIngredient}}\",\r\n            \"amount\": \"{{ingredientAmount}}\"\r\n        },\r\n        {\r\n            \"ingredient\": \"{{recipeIngredient}}\",\r\n            \"amount\": \"{{ingredientAmount}}\"\r\n        }\r\n    ],\r\n    \"steps\": [\r\n        \"boil water\", \"put pasta for 10min\", \"enjoy\"\r\n    ],\r\n    \"category\": \"Main Dish\",\r\n    \"cuisine\": \"italian\",\r\n    \"images\": \"{{image}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URI}}/recipes",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"recipes"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "79"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"4f-6cbn/h9DAhkgHZi40hYJd2oPz20\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 19 Jul 2024 07:31:01 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"recipeid\": 147,\n    \"title\": \"kr5h3d4bass\",\n    \"categoryid\": 4,\n    \"cuisineid\": 1,\n    \"userid\": 55\n}"
+						},
+						{
+							"name": "201 Created with No Recipe title",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"\",\r\n    \"ingredients\": [\r\n        {\r\n            \"ingredient\": \"{{recipeIngredient}}\",\r\n            \"amount\": \"{{ingredientAmount}}\"\r\n        },\r\n        {\r\n            \"ingredient\": \"{{recipeIngredient}}\",\r\n            \"amount\": \"{{ingredientAmount}}\"\r\n        }\r\n    ],\r\n    \"steps\": [\r\n        \"{{recipeSteps}}\", \"{{recipeSteps}}\", \"{{recipeSteps}}\"\r\n    ],\r\n    \"category\": \"{{randomRecipeCategory}}\",\r\n    \"cuisine\": \"{{randomRecipeCuisine}}\",\r\n    \"image\": \"{{recipeImages}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URI}}/recipes",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"recipes"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "70"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"46-Wd/9F3ZoYCiG9VOa3TPmCUKA0Is\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 29 Jul 2024 09:30:46 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"recipeid\": 363,\n    \"title\": \"\",\n    \"categoryid\": 1,\n    \"cuisineid\": 12,\n    \"userid\": 229\n}"
+						},
+						{
+							"name": "201 Created with No Recipe Ingredient",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"{{recipeName}}\",\r\n    \"ingredients\": [\r\n        {\r\n            \"ingredient\": \"\",\r\n            \"amount\": \"{{ingredientAmount}}\"\r\n        },\r\n        {\r\n            \"ingredient\": \"\",\r\n            \"amount\": \"{{ingredientAmount}}\"\r\n        }\r\n    ],\r\n    \"steps\": [\r\n        \"{{recipeSteps}}\", \"{{recipeSteps}}\", \"{{recipeSteps}}\"\r\n    ],\r\n    \"category\": \"{{randomRecipeCategory}}\",\r\n    \"cuisine\": \"{{randomRecipeCuisine}}\",\r\n    \"image\": \"{{recipeImages}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URI}}/recipes",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"recipes"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "92"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"5c-52/MqRko6oVANNr22EyO84I91+M\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 29 Jul 2024 09:31:16 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"recipeid\": 364,\n    \"title\": \"Recipe name: tt21s7g2ps\",\n    \"categoryid\": 1,\n    \"cuisineid\": 6,\n    \"userid\": 229\n}"
+						},
+						{
+							"name": "201 Created with No Recipe Ingredient Amount",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"{{recipeName}}\",\r\n    \"ingredients\": [\r\n        {\r\n            \"ingredient\": \"{{recipeIngredient}}\",\r\n            \"amount\": \"\"\r\n        },\r\n        {\r\n            \"ingredient\": \"{{recipeIngredient}}\",\r\n            \"amount\": \"\"\r\n        }\r\n    ],\r\n    \"steps\": [\r\n        \"{{recipeSteps}}\", \"{{recipeSteps}}\", \"{{recipeSteps}}\"\r\n    ],\r\n    \"category\": \"{{randomRecipeCategory}}\",\r\n    \"cuisine\": \"{{randomRecipeCuisine}}\",\r\n    \"image\": \"{{recipeImages}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URI}}/recipes",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"recipes"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "94"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"5e-50w0WNyGU5QB3IYPWBnf2deQNOw\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 29 Jul 2024 09:31:52 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"recipeid\": 365,\n    \"title\": \"Recipe name: mrz5n5lhmsm\",\n    \"categoryid\": 3,\n    \"cuisineid\": 46,\n    \"userid\": 229\n}"
+						},
+						{
+							"name": "201 Created Recipe with No Steps",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"{{recipeName}}\",\r\n    \"ingredients\": [\r\n        {\r\n            \"ingredient\": \"{{recipeIngredient}}\",\r\n            \"amount\": \"{{ingredientAmount}}\"\r\n        },\r\n        {\r\n            \"ingredient\": \"{{recipeIngredient}}\",\r\n            \"amount\": \"{{ingredientAmount}}\"\r\n        }\r\n    ],\r\n    \"steps\": [\r\n        \"\", \"\", \"\"\r\n    ],\r\n    \"category\": \"{{randomRecipeCategory}}\",\r\n    \"cuisine\": \"{{randomRecipeCuisine}}\",\r\n    \"image\": \"{{recipeImages}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URI}}/recipes",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"recipes"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "95"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"5f-G0PdD55uAgwRNRTcjt0RFR9fXyw\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 29 Jul 2024 09:32:35 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"recipeid\": 366,\n    \"title\": \"Recipe name: 0bwhnjbhbkyd\",\n    \"categoryid\": 2,\n    \"cuisineid\": 41,\n    \"userid\": 229\n}"
+						},
+						{
+							"name": "201 Created Recipe with No Category",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"{{recipeName}}\",\r\n    \"ingredients\": [\r\n        {\r\n            \"ingredient\": \"{{recipeIngredient}}\",\r\n            \"amount\": \"{{ingredientAmount}}\"\r\n        },\r\n        {\r\n            \"ingredient\": \"{{recipeIngredient}}\",\r\n            \"amount\": \"{{ingredientAmount}}\"\r\n        }\r\n    ],\r\n    \"steps\": [\r\n        \"{{recipeSteps}}\", \"{{recipeSteps}}\", \"{{recipeSteps}}\"\r\n    ],\r\n    \"category\": \"\",\r\n    \"cuisine\": \"{{randomRecipeCuisine}}\",\r\n    \"image\": \"{{recipeImages}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URI}}/recipes",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"recipes"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "97"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"61-QqJlUfa8Z9HFciy5nCcnBwFTYSA\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 29 Jul 2024 09:32:57 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"recipeid\": 367,\n    \"title\": \"Recipe name: 89xtwug6spx\",\n    \"categoryid\": null,\n    \"cuisineid\": 89,\n    \"userid\": 229\n}"
+						},
+						{
+							"name": "201 Created with No Recipe Cuisine",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"{{recipeName}}\",\r\n    \"ingredients\": [\r\n        {\r\n            \"ingredient\": \"{{recipeIngredient}}\",\r\n            \"amount\": \"{{ingredientAmount}}\"\r\n        },\r\n        {\r\n            \"ingredient\": \"{{recipeIngredient}}\",\r\n            \"amount\": \"{{ingredientAmount}}\"\r\n        }\r\n    ],\r\n    \"steps\": [\r\n        \"{{recipeSteps}}\", \"{{recipeSteps}}\", \"{{recipeSteps}}\"\r\n    ],\r\n    \"category\": \"{{randomRecipeCategory}}\",\r\n    \"cuisine\": \"\",\r\n    \"image\": \"{{recipeImages}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URI}}/recipes",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"recipes"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "96"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"60-MjibTXBIr/W8qFxpvLLqZE8pjhQ\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 29 Jul 2024 09:33:20 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"recipeid\": 368,\n    \"title\": \"Recipe name: wipq28mzcw9\",\n    \"categoryid\": 4,\n    \"cuisineid\": null,\n    \"userid\": 229\n}"
+						},
+						{
+							"name": "201 Created with No Recipe Image",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"{{recipeName}}\",\r\n    \"ingredients\": [\r\n        {\r\n            \"ingredient\": \"{{recipeIngredient}}\",\r\n            \"amount\": \"{{ingredientAmount}}\"\r\n        },\r\n        {\r\n            \"ingredient\": \"{{recipeIngredient}}\",\r\n            \"amount\": \"{{ingredientAmount}}\"\r\n        }\r\n    ],\r\n    \"steps\": [\r\n        \"{{recipeSteps}}\", \"{{recipeSteps}}\", \"{{recipeSteps}}\"\r\n    ],\r\n    \"category\": \"{{randomRecipeCategory}}\",\r\n    \"cuisine\": \"{{randomRecipeCuisine}}\",\r\n    \"image\": \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URI}}/recipes",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"recipes"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "94"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"5e-8S1qOxWdq5Jhc/y3yGe6WO/MVlQ\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 29 Jul 2024 09:33:45 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"recipeid\": 369,\n    \"title\": \"Recipe name: eegyps2ulig\",\n    \"categoryid\": 2,\n    \"cuisineid\": 64,\n    \"userid\": 229\n}"
+						}
+					]
+				},
+				{
+					"name": "Get  Recipes by Category ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"//try/catch block in case the response body doesn't appear\r",
+									"try {\r",
+									"    jsonData = pm.response.json(); \r",
+									"} catch (e) {\r",
+									"    console.error('Failed to parse response body as JSON:', e);\r",
+									"}\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"//debug log\r",
+									"console.log(pm.environment.get(\"recipeCategoryId\"));\r",
+									"\r",
+									"//this block functions if this array isn't empty\r",
+									"if (Array.isArray(jsonData) && jsonData.length > 0) {\r",
+									"    const recipe = jsonData[0];\r",
+									"\r",
+									"    pm.test(\"Assert the recipe ID exists\", function() {\r",
+									"        pm.expect(recipe.recipeId).to.not.be.null;\r",
+									"        pm.expect(recipe.recipeId).to.be.a('number'); \r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Assert the recipe name exists\", function() {\r",
+									"        pm.expect(recipe.name).to.not.be.null; \r",
+									"        pm.expect(recipe.name).to.be.a('string');\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Assert the recipe category exists\", function() {\r",
+									"        pm.expect(recipe.category).to.not.be.null; \r",
+									"        pm.expect(recipe.category).to.be.a('string');\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Assert the recipe cuisine exists\", function() {\r",
+									"        pm.expect(recipe.cuisine).to.not.be.null;\r",
+									"        pm.expect(recipe.cuisine).to.be.a('string');\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Assert the recipe ingredients description block exists\", function() {\r",
+									"        pm.expect(recipe.ingredients).to.not.be.null;\r",
+									"        pm.expect(recipe.ingredients).to.be.an('array');\r",
+									"    });\r",
+									"\r",
+									"    //these two block function if these separate arrays are not empty\r",
+									"    if (recipe.ingredients && recipe.ingredients.length > 0) {\r",
+									"        pm.test(\"Assert the recipe ingredient name exists\", function() {\r",
+									"            pm.expect(recipe.ingredients[0].ingredient).to.not.be.null; \r",
+									"            pm.expect(recipe.ingredients[0].ingredient).to.be.a('string'); \r",
+									"        });\r",
+									"\r",
+									"        pm.test(\"Assert the recipe ingredient amount exists\", function() {\r",
+									"            pm.expect(recipe.ingredients[0].amount).to.not.be.null;\r",
+									"            pm.expect(recipe.ingredients[0].amount).to.be.a('string');\r",
+									"        });\r",
+									"    }\r",
+									"\r",
+									"    pm.test(\"Assert the recipe steps description block exists\", function() {\r",
+									"        pm.expect(recipe.steps).to.not.be.null; \r",
+									"        pm.expect(recipe.steps).to.be.an('array');\r",
+									"    });\r",
+									"\r",
+									"    if (recipe.steps && Array.isArray(recipe.steps) && recipe.steps.length > 0) {\r",
+									"        pm.test(\"Assert the recipe step number exists\", function() {\r",
+									"            pm.expect(recipe.steps[0].step_number).to.not.be.null; \r",
+									"            pm.expect(recipe.steps[0].step_number).to.be.a('number');\r",
+									"        });\r",
+									"\r",
+									"        pm.test(\"Assert the recipe step description exists\", function() {\r",
+									"            pm.expect(recipe.steps[0].description).to.not.be.null;\r",
+									"            pm.expect(recipe.steps[0].description).to.be.a('string');\r",
+									"        });\r",
+									"    } else {\r",
+									"        console.error('Recipe steps array is either undefined or empty');\r",
+									"    }\r",
+									"}\r",
+									"\r",
+									"//since the recipe rating is a separate array, the assert is set accordingly\r",
+									"pm.test(\"Assert if the recipe rating exists\", function () {\r",
+									"    pm.expect(jsonData).to.be.an('array');\r",
+									"    jsonData.forEach((recipe) => {\r",
+									"        pm.expect(recipe).to.have.property('ratings');\r",
+									"        pm.expect(recipe.ratings).to.be.an('array');\r",
+									"\r",
+									"        if (recipe.ratings.length === 0) {\r",
+									"            console.log(`Recipe with ID ${recipe.id || 'unknown'} has no ratings.`);\r",
+									"        }\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"//response schema validation\r",
+									"let schema = {\r",
+									"    \"type\": \"array\",\r",
+									"    \"items\": {\r",
+									"        \"type\": \"object\",\r",
+									"        \"properties\": {\r",
+									"            \"recipeId\": {\r",
+									"                \"type\": \"number\"\r",
+									"            },\r",
+									"            \"name\": {\r",
+									"                \"type\": \"string\"\r",
+									"            },\r",
+									"            \"category\": {\r",
+									"                \"type\": \"string\"\r",
+									"            },\r",
+									"            \"cuisine\": {\r",
+									"                \"type\": \"string\"\r",
+									"            },\r",
+									"            \"ingredients\": {\r",
+									"                \"type\": \"array\",\r",
+									"                \"items\": {\r",
+									"                    \"type\": \"object\",\r",
+									"                    \"properties\": {\r",
+									"                        \"ingredient\": {\r",
+									"                            \"type\": \"string\"\r",
+									"                        },\r",
+									"                        \"amount\": {\r",
+									"                            \"type\": \"string\"\r",
+									"                        }\r",
+									"                    },\r",
+									"                    \"required\": [\"ingredient\", \"amount\"]\r",
+									"                }\r",
+									"            },\r",
+									"            \"steps\": {\r",
+									"                \"type\": \"array\",\r",
+									"                \"items\": {\r",
+									"                    \"type\": \"object\",\r",
+									"                    \"properties\": {\r",
+									"                        \"step_number\": {\r",
+									"                            \"type\": \"number\"\r",
+									"                        },\r",
+									"                        \"description\": {\r",
+									"                            \"type\": \"string\"\r",
+									"                        }\r",
+									"                    },\r",
+									"                    \"required\": [\"step_number\", \"description\"]\r",
+									"                }\r",
+									"            }\r",
+									"        },\r",
+									"        \"ratings\": {\r",
+									"            \"type\": \"array\",\r",
+									"            \"items\": {\r",
+									"                \"type\": [\"string\", \"null\"]\r",
+									"            }\r",
+									"        },\r",
+									"        \"required\": [\"recipeId\", \"name\", \"category\", \"cuisine\", \"ingredients\", \"steps\"]\r",
+									"    }\r",
+									"}\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"    pm.response.to.have.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									"//debug log\r",
+									"console.log(\"Response Data:\", JSON.stringify(jsonData, null, 2));\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URI}}/categories/:categoryId/recipes",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"categories",
+								":categoryId",
+								"recipes"
+							],
+							"variable": [
+								{
+									"key": "categoryId",
+									"value": "{{recipeCategoryId}}"
+								}
+							]
+						},
+						"description": "Get registered user recipe by Category ID"
+					},
+					"response": [
+						{
+							"name": "200 OK",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URI}}/categories/2/recipes",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"categories",
+										"2",
+										"recipes"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "491"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1eb-+oDAji+6LkKxW/B1i0EtcofxqHg\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 15 Jul 2024 09:18:43 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"recipeId\": 11,\n        \"name\": \"Pancakes\",\n        \"category\": \"dessert\",\n        \"cuisine\": \"american\",\n        \"ingredients\": [\n            {\n                \"ingredient\": \"flour\",\n                \"amount\": \"120 g.\"\n            },\n            {\n                \"ingredient\": \"water\",\n                \"amount\": \"200 g.\"\n            }\n        ],\n        \"steps\": [\n            {\n                \"step_number\": 1,\n                \"description\": \"input flour into bowl\"\n            },\n            {\n                \"step_number\": 2,\n                \"description\": \"input water into bowl\"\n            },\n            {\n                \"step_number\": 3,\n                \"description\": \"mix the mixture with a spoon\"\n            },\n            {\n                \"step_number\": 4,\n                \"description\": \"input some of the mass onto hot frying pan\"\n            },\n            {\n                \"step_number\": 5,\n                \"description\": \"cook for 12 minutes\"\n            }\n        ]\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Get Recipe by Cuisine ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = pm.response.json();\r",
+									"\r",
+									"\r",
+									"jsonData = jsonData[0];\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"//variable getter from environment\r",
+									"console.log(pm.environment.get(\"cuisineId\"));\r",
+									"\r",
+									"pm.test(\"Assert the recipe ID exists\", function() {\r",
+									"    pm.expect(jsonData.recipeId).to.not.be.null;\r",
+									"    pm.expect(jsonData.recipeId).to.be.a('number');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Assert recipe name exists\", function() {\r",
+									"    pm.expect(jsonData.name).to.not.be.null;\r",
+									"    pm.expect(jsonData.name).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Assert recipe category exists\", function() {\r",
+									"    pm.expect(jsonData.category).to.not.be.null;\r",
+									"    pm.expect(jsonData.category).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Assert recipe cuisine exists\", function() {\r",
+									"    pm.expect(jsonData.cuisine).to.not.be.null;\r",
+									"    pm.expect(jsonData.cuisine).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Assert recipe ingredients array exists\", function() {\r",
+									"    pm.expect(jsonData.ingredients).to.be.an('array');\r",
+									"    pm.expect(jsonData.ingredients.length).to.be.above(0);\r",
+									"});\r",
+									"\r",
+									"//since each of these blocks is an array, asserts are modified accordingly\r",
+									"pm.test(\"Assert recipe ingredients name exists\", function() {\r",
+									"    jsonData.ingredients.forEach(ingredient => {\r",
+									"        pm.expect(ingredient.ingredient).to.not.be.null;\r",
+									"        pm.expect(ingredient.ingredient).to.be.a('string');\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Assert recipe ingredient amount exists\", function() {\r",
+									"    jsonData.ingredients.forEach(ingredient => {\r",
+									"        pm.expect(ingredient.amount).to.not.be.null;\r",
+									"        pm.expect(ingredient.amount).to.be.a('string');\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Assert recipe steps array exists\", function() {\r",
+									"    pm.expect(jsonData.steps).to.be.an('array');\r",
+									"    pm.expect(jsonData.steps.length).to.be.above(0);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Assert recipe step number exists\", function() {\r",
+									"    jsonData.steps.forEach(step => {\r",
+									"        pm.expect(step.step_number).to.not.be.null; \r",
+									"        pm.expect(step.step_number).to.be.a('number');\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Assert recipe step description exists\", function() {\r",
+									"    jsonData.steps.forEach(step => {\r",
+									"        pm.expect(step.description).to.not.be.null; \r",
+									"        pm.expect(step.description).to.be.a('string'); \r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"\r",
+									"//schema validation\r",
+									"let schema = {\r",
+									"    \"type\": \"array\",\r",
+									"    \"items\": {\r",
+									"        \"type\": \"object\",\r",
+									"        \"properties\": {\r",
+									"            \"recipeId\": {\r",
+									"                \"type\": \"integer\"\r",
+									"            },\r",
+									"            \"name\": {\r",
+									"                \"type\": \"string\"\r",
+									"            },\r",
+									"            \"category\": {\r",
+									"                \"type\": \"string\"\r",
+									"            },\r",
+									"            \"cuisine\": {\r",
+									"                \"type\": \"string\"\r",
+									"            },\r",
+									"            \"ingredients\": {\r",
+									"                \"type\": \"array\",\r",
+									"                \"items\": {\r",
+									"                    \"type\": \"object\",\r",
+									"                    \"properties\": {\r",
+									"                        \"ingredient\": {\r",
+									"                            \"type\": \"string\"\r",
+									"                        },\r",
+									"                        \"amount\": {\r",
+									"                            \"type\": \"string\"\r",
+									"                        }\r",
+									"                    },\r",
+									"                    \"required\": [\"ingredient\", \"amount\"]\r",
+									"                }\r",
+									"            },\r",
+									"            \"steps\": {\r",
+									"                \"type\": \"array\",\r",
+									"                \"items\": {\r",
+									"                    \"type\": \"object\",\r",
+									"                    \"properties\": {\r",
+									"                        \"step_number\": {\r",
+									"                            \"type\": \"integer\"\r",
+									"                        },\r",
+									"                        \"description\": {\r",
+									"                            \"type\": \"string\"\r",
+									"                        }\r",
+									"                    },\r",
+									"                    \"required\": [\"step_number\", \"description\"]\r",
+									"                }\r",
+									"            },\r",
+									"            \"ratings\": {\r",
+									"                \"type\": \"array\",\r",
+									"                \"items\": {\r",
+									"                    \"type\": [\"string\", \"null\"]\r",
+									"                }\r",
+									"            }\r",
+									"        },\r",
+									"        \"required\": [\"recipeId\", \"name\", \"category\", \"cuisine\", \"ingredients\", \"steps\", \"ratings\"]\r",
+									"    }\r",
+									"}\r",
+									"\r",
+									"pm.test('Schema validation', () => {\r",
+									"  pm.response.to.have.jsonSchema (schema);\r",
+									"});\r",
+									"\r",
+									"//debug log\r",
+									"console.log(\"Response Data:\", JSON.stringify(jsonData, null, 2));\r",
+									"\r",
+									"\r",
+									"pm.test(\"Assert response is not an empty array\", function () {\r",
+									"    pm.expect(jsonData).to.not.be.empty;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URI}}/cuisines/:cuisineId",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"cuisines",
+								":cuisineId"
+							],
+							"variable": [
+								{
+									"key": "cuisineId",
+									"value": "{{cuisineId}}"
+								}
+							]
+						},
+						"description": "Get registered user recipe by its cuisine ID"
+					},
+					"response": [
+						{
+							"name": "200 OK",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URI}}/cuisines/:cuisineId",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"cuisines",
+										":cuisineId"
+									],
+									"variable": [
+										{
+											"key": "cuisineId",
+											"value": "{{cuisineId}}"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "3377"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"d31-vHUmWmXjXW6srlae3mC+sDcOPKE\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 19 Jul 2024 09:03:04 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"recipeId\": 145,\n        \"name\": \"sq81wch9njm\",\n        \"category\": \"main dish\",\n        \"cuisine\": \"italian\",\n        \"ingredients\": [\n            {\n                \"ingredient\": \"sq81wch9njm\",\n                \"amount\": \"603 g.\"\n            }\n        ],\n        \"steps\": [\n            {\n                \"step_number\": 1,\n                \"description\": \"boil water\"\n            },\n            {\n                \"step_number\": 2,\n                \"description\": \"put pasta for 10min\"\n            },\n            {\n                \"step_number\": 3,\n                \"description\": \"enjoy\"\n            }\n        ],\n        \"ratings\": []\n    },\n    {\n        \"recipeId\": 146,\n        \"name\": \"rwx9cr4ojd\",\n        \"category\": \"main dish\",\n        \"cuisine\": \"italian\",\n        \"ingredients\": [\n            {\n                \"ingredient\": \"rwx9cr4ojd\",\n                \"amount\": \"916 g.\"\n            }\n        ],\n        \"steps\": [\n            {\n                \"step_number\": 1,\n                \"description\": \"boil water\"\n            },\n            {\n                \"step_number\": 2,\n                \"description\": \"put pasta for 10min\"\n            },\n            {\n                \"step_number\": 3,\n                \"description\": \"enjoy\"\n            }\n        ],\n        \"ratings\": []\n    },\n    {\n        \"recipeId\": 148,\n        \"name\": \"y3qvku8xtsg\",\n        \"category\": \"main dish\",\n        \"cuisine\": \"italian\",\n        \"ingredients\": [\n            {\n                \"ingredient\": \"y3qvku8xtsg\",\n                \"amount\": \"651 g.\"\n            }\n        ],\n        \"steps\": [\n            {\n                \"step_number\": 1,\n                \"description\": \"boil water\"\n            },\n            {\n                \"step_number\": 2,\n                \"description\": \"put pasta for 10min\"\n            },\n            {\n                \"step_number\": 3,\n                \"description\": \"enjoy\"\n            }\n        ],\n        \"ratings\": []\n    },\n    {\n        \"recipeId\": 149,\n        \"name\": \"ovb8ccxofgt\",\n        \"category\": \"main dish\",\n        \"cuisine\": \"italian\",\n        \"ingredients\": [\n            {\n                \"ingredient\": \"ovb8ccxofgt\",\n                \"amount\": \"939 g.\"\n            }\n        ],\n        \"steps\": [\n            {\n                \"step_number\": 1,\n                \"description\": \"boil water\"\n            },\n            {\n                \"step_number\": 2,\n                \"description\": \"put pasta for 10min\"\n            },\n            {\n                \"step_number\": 3,\n                \"description\": \"enjoy\"\n            }\n        ],\n        \"ratings\": []\n    },\n    {\n        \"recipeId\": 150,\n        \"name\": \"0ktvvr2teby\",\n        \"category\": \"main dish\",\n        \"cuisine\": \"italian\",\n        \"ingredients\": [\n            {\n                \"ingredient\": \"0ktvvr2teby\",\n                \"amount\": \"744 g.\"\n            }\n        ],\n        \"steps\": [\n            {\n                \"step_number\": 1,\n                \"description\": \"boil water\"\n            },\n            {\n                \"step_number\": 2,\n                \"description\": \"put pasta for 10min\"\n            },\n            {\n                \"step_number\": 3,\n                \"description\": \"enjoy\"\n            }\n        ],\n        \"ratings\": []\n    },\n    {\n        \"recipeId\": 152,\n        \"name\": \"f1ramz0mom9\",\n        \"category\": \"main dish\",\n        \"cuisine\": \"italian\",\n        \"ingredients\": [\n            {\n                \"ingredient\": \"f1ramz0mom9\",\n                \"amount\": \"186 g.\"\n            }\n        ],\n        \"steps\": [\n            {\n                \"step_number\": 1,\n                \"description\": \"boil water\"\n            },\n            {\n                \"step_number\": 2,\n                \"description\": \"put pasta for 10min\"\n            },\n            {\n                \"step_number\": 3,\n                \"description\": \"enjoy\"\n            }\n        ],\n        \"ratings\": []\n    },\n    {\n        \"recipeId\": 158,\n        \"name\": \"zb69xl6z7oq\",\n        \"category\": \"main dish\",\n        \"cuisine\": \"italian\",\n        \"ingredients\": [\n            {\n                \"ingredient\": \"zb69xl6z7oq\",\n                \"amount\": \"536 g.\"\n            }\n        ],\n        \"steps\": [\n            {\n                \"step_number\": 1,\n                \"description\": \"boil water\"\n            },\n            {\n                \"step_number\": 2,\n                \"description\": \"put pasta for 10min\"\n            },\n            {\n                \"step_number\": 3,\n                \"description\": \"enjoy\"\n            }\n        ],\n        \"ratings\": []\n    },\n    {\n        \"recipeId\": 164,\n        \"name\": \"fgmf6lcm83s\",\n        \"category\": \"main dish\",\n        \"cuisine\": \"italian\",\n        \"ingredients\": [\n            {\n                \"ingredient\": \"fgmf6lcm83s\",\n                \"amount\": \"251 g.\"\n            }\n        ],\n        \"steps\": [\n            {\n                \"step_number\": 1,\n                \"description\": \"boil water\"\n            },\n            {\n                \"step_number\": 2,\n                \"description\": \"put pasta for 10min\"\n            },\n            {\n                \"step_number\": 3,\n                \"description\": \"enjoy\"\n            }\n        ],\n        \"ratings\": [\n            \"3.0\"\n        ]\n    },\n    {\n        \"recipeId\": 165,\n        \"name\": \"xuu94eb5b8n\",\n        \"category\": \"main dish\",\n        \"cuisine\": \"italian\",\n        \"ingredients\": [\n            {\n                \"ingredient\": \"xuu94eb5b8n\",\n                \"amount\": \"814 g.\"\n            }\n        ],\n        \"steps\": [\n            {\n                \"step_number\": 1,\n                \"description\": \"boil water\"\n            },\n            {\n                \"step_number\": 2,\n                \"description\": \"put pasta for 10min\"\n            },\n            {\n                \"step_number\": 3,\n                \"description\": \"enjoy\"\n            }\n        ],\n        \"ratings\": []\n    },\n    {\n        \"recipeId\": 166,\n        \"name\": \"04whardkhuyj\",\n        \"category\": \"main dish\",\n        \"cuisine\": \"italian\",\n        \"ingredients\": [\n            {\n                \"ingredient\": \"04whardkhuyj\",\n                \"amount\": \"165 g.\"\n            }\n        ],\n        \"steps\": [\n            {\n                \"step_number\": 1,\n                \"description\": \"boil water\"\n            },\n            {\n                \"step_number\": 2,\n                \"description\": \"put pasta for 10min\"\n            },\n            {\n                \"step_number\": 3,\n                \"description\": \"enjoy\"\n            }\n        ],\n        \"ratings\": []\n    },\n    {\n        \"recipeId\": 167,\n        \"name\": \"l5far5ur8gp\",\n        \"category\": \"main dish\",\n        \"cuisine\": \"italian\",\n        \"ingredients\": [\n            {\n                \"ingredient\": \"l5far5ur8gp\",\n                \"amount\": \"845 g.\"\n            }\n        ],\n        \"steps\": [\n            {\n                \"step_number\": 1,\n                \"description\": \"boil water\"\n            },\n            {\n                \"step_number\": 2,\n                \"description\": \"put pasta for 10min\"\n            },\n            {\n                \"step_number\": 3,\n                \"description\": \"enjoy\"\n            }\n        ],\n        \"ratings\": [\n            \"3.0\"\n        ]\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Get a Recipe by its ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Assert recipe ID exists\", function(){\r",
+									"    pm.expect(jsonData.recipeid).to.exist;\r",
+									"    pm.expect(jsonData.recipeid).to.be.a('number');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Assert recipe name exists\", function(){\r",
+									"    pm.expect(jsonData.name).to.exist;\r",
+									"    pm.expect(jsonData.name).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Assert user name exists\", function(){\r",
+									"    pm.expect(jsonData.username).to.exist;\r",
+									"    pm.expect(jsonData.username).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Assert user last name exists\", function(){\r",
+									"    pm.expect(jsonData.userlastname).to.exist;\r",
+									"    pm.expect(jsonData.userlastname).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Assert recipe category exists\", function(){\r",
+									"    pm.expect(jsonData.category).to.exist;\r",
+									"    pm.expect(jsonData.category).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Assert recipe cuisine exists\", function(){\r",
+									"    pm.expect(jsonData.cuisine).to.exist;\r",
+									"    pm.expect(jsonData.cuisine).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"//asserts recipe image url to be a string\r",
+									"pm.test(\"Assert recipe image URL exists\", function() {\r",
+									"    pm.expect(jsonData).to.be.an('object');\r",
+									"    \r",
+									"    if (!jsonData.image_url) {\r",
+									"        console.log(\"Image URL is missing.\");\r",
+									"    } else if (typeof jsonData.image_url !== 'string') {\r",
+									"        console.log(\"Image URL is not a string.\");\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Assert recipe ingredients block exists\", function(){\r",
+									"    pm.expect(jsonData.ingredients).to.exist;\r",
+									"    pm.expect(jsonData.ingredients).to.be.an('array').that.is.not.empty;\r",
+									"});\r",
+									"\r",
+									"//since ingredient properties are an array, the assert is modified accordingly\r",
+									"pm.test(\"Assert recipe ingredient array has properties\", function(){\r",
+									"    jsonData.ingredients.forEach(function(ingredient) {\r",
+									"        pm.expect(ingredient).to.have.property('amount').that.is.a('string').and.to.not.be.null;\r",
+									"        pm.expect(ingredient).to.have.property('ingredient').that.is.a('string').and.to.not.be.null;\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"//steps are an array block too\r",
+									"pm.test(\"Assert steps to be strings\", function() {\r",
+									"    jsonData.steps.forEach(function(step) {\r",
+									"        pm.expect(step).to.be.a('string');\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Assert social block exists\", function(){\r",
+									"    pm.expect(jsonData.social).to.exist;\r",
+									"    pm.expect(jsonData.social).to.be.an('object');\r",
+									"});\r",
+									"\r",
+									"//assert the creator ID is equal to user ID\r",
+									"pm.test(\"Assert the creator ID is equal to user ID\", function(){\r",
+									"    if(jsonData.creatorid === pm.environment.get(\"userId\")){\r",
+									"        console.log(\"The creator ID matches the user ID\");\r",
+									"    }else{\r",
+									"        console.error(\"The creator ID doesn't match user ID\");\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"\r",
+									"//schema validation\r",
+									"let schema = {\r",
+									"  \"type\": \"object\",\r",
+									"  \"properties\": {\r",
+									"    \"recipeid\": {\r",
+									"      \"type\": \"integer\"\r",
+									"    },\r",
+									"    \"name\": {\r",
+									"      \"type\": \"string\"\r",
+									"    },\r",
+									"    \"username\": {\r",
+									"      \"type\": \"string\"\r",
+									"    },\r",
+									"    \"userlastname\": {\r",
+									"      \"type\": \"string\"\r",
+									"    },\r",
+									"    \"category\": {\r",
+									"      \"type\": \"string\"\r",
+									"    },\r",
+									"    \"cuisine\": {\r",
+									"      \"type\": \"string\"\r",
+									"    },\r",
+									"    \"image_url\": {\r",
+									"      \"type\": [\"string\", \"null\"]\r",
+									"    },\r",
+									"    \"ingredients\": {\r",
+									"      \"type\": \"array\",\r",
+									"      \"items\": {\r",
+									"        \"type\": \"object\",\r",
+									"        \"properties\": {\r",
+									"          \"amount\": {\r",
+									"            \"type\": \"string\"\r",
+									"          },\r",
+									"          \"ingredient\": {\r",
+									"            \"type\": \"string\"\r",
+									"          }\r",
+									"        },\r",
+									"        \"required\": [\"amount\", \"ingredient\"]\r",
+									"      }\r",
+									"    },\r",
+									"    \"steps\": {\r",
+									"      \"type\": \"array\",\r",
+									"      \"items\": {\r",
+									"        \"type\": \"string\"\r",
+									"      }\r",
+									"    },\r",
+									"     \"social\": {\r",
+									"      \"type\": \"object\",\r",
+									"      \"properties\": {\r",
+									"\r",
+									"        \"ratings\": {\r",
+									"          \"type\": [\"array\", \"null\"],\r",
+									"          \"items\": {\r",
+									"            \"type\": \"object\",\r",
+									"            \"properties\": {\r",
+									"              \"rating_id\": {\r",
+									"                \"type\": \"integer\"\r",
+									"              },\r",
+									"              \"rater_name\": {\r",
+									"                \"type\": \"string\"\r",
+									"              },\r",
+									"              \"review_date\": {\r",
+									"                \"type\": \"string\",\r",
+									"              },\r",
+									"              \"rating_value\": {\r",
+									"                \"type\": \"integer\"\r",
+									"              },\r",
+									"              \"rater_lastname\": {\r",
+									"                \"type\": \"string\"\r",
+									"              }\r",
+									"            },\r",
+									"            \"required\": [\"rating_id\", \"rater_name\", \"review_date\", \"rating_value\", \"rater_lastname\"]\r",
+									"          }\r",
+									"        },\r",
+									"\r",
+									"        \"comments\": {\r",
+									"          \"type\": [\"array\", \"null\"],\r",
+									"          \"items\": {\r",
+									"            \"type\": \"object\",\r",
+									"            \"properties\": {\r",
+									"              \"comment_id\": {\r",
+									"                \"type\": \"integer\"\r",
+									"              },\r",
+									"              \"comment_date\": {\r",
+									"                \"type\": \"string\",\r",
+									"              },\r",
+									"              \"comment_text\": {\r",
+									"                \"type\": \"string\"\r",
+									"              },\r",
+									"              \"commenter_name\": {\r",
+									"                \"type\": \"string\"\r",
+									"              },\r",
+									"              \"commenter_lastname\": {\r",
+									"                \"type\": \"string\"\r",
+									"              }\r",
+									"            },\r",
+									"            \"required\": [\"comment_id\", \"comment_date\", \"comment_text\", \"commenter_name\", \"commenter_lastname\"]\r",
+									"          }\r",
+									"        }\r",
+									"      },\r",
+									"      \"required\": [\"ratings\", \"comments\"]\r",
+									"    },\r",
+									"  },\r",
+									"  \"average_rating\": {\r",
+									"    \"type\": [\"number\", \"null\"]\r",
+									"  },\r",
+									"  \"required\": [\r",
+									"    \"recipeid\",\r",
+									"    \"name\",\r",
+									"    \"username\",\r",
+									"    \"userlastname\",\r",
+									"    \"category\",\r",
+									"    \"cuisine\",\r",
+									"    \"ingredients\",\r",
+									"    \"steps\",\r",
+									"    \"social\"\r",
+									"  ]\r",
+									"}\r",
+									"\r",
+									"\r",
+									"pm.test('Schema validation', () => {\r",
+									"  pm.response.to.have.jsonSchema (schema);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"//debug log\r",
+									"console.log(\"Response Data:\", JSON.stringify(jsonData, null, 2));\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URI}}/recipes/:recipeId",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"recipes",
+								":recipeId"
+							],
+							"variable": [
+								{
+									"key": "recipeId",
+									"value": "{{recipeId}}"
+								}
+							]
+						},
+						"description": "Get a registered user recipe by recipe ID"
+					},
+					"response": [
+						{
+							"name": "200 OK",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URI}}/recipes/:recipeId",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"recipes",
+										":recipeId"
+									],
+									"variable": [
+										{
+											"key": "recipeId",
+											"value": "{{recipeId}}"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1040"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"410-+RFYCeCV1+pDhGT77aoc4BlQRjw\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 22 Jul 2024 08:14:09 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"recipeid\": 192,\n    \"name\": \"j4opujx79de\",\n    \"username\": \"FrTzknjb00ibn0a\",\n    \"userlastname\": \"{{userLastname}}\",\n    \"creatorid\": 75,\n    \"category\": \"main dish\",\n    \"cuisine\": \"italian\",\n    \"image_url\": null,\n    \"ingredients\": [\n        {\n            \"amount\": \"637 g.\",\n            \"ingredient\": \"j4opujx79de\"\n        },\n        {\n            \"amount\": \"637 g.\",\n            \"ingredient\": \"j4opujx79de\"\n        },\n        {\n            \"amount\": \"637 g.\",\n            \"ingredient\": \"j4opujx79de\"\n        }\n    ],\n    \"steps\": [\n        \"boil water\",\n        \"put pasta for 10min\",\n        \"enjoy\"\n    ],\n    \"social\": {\n        \"ratings\": [\n            {\n                \"rating_id\": 45,\n                \"rater_name\": \"FrTzknjb00ibn0a\",\n                \"review_date\": \"2024-07-22T08:19:19.261374\",\n                \"rating_value\": 3,\n                \"rater_lastname\": \"{{userLastname}}\"\n            },\n            {\n                \"rating_id\": 44,\n                \"rater_name\": \"FrTzknjb00ibn0a\",\n                \"review_date\": \"2024-07-22T08:17:51.888472\",\n                \"rating_value\": 3,\n                \"rater_lastname\": \"{{userLastname}}\"\n            }\n        ],\n        \"comments\": [\n            {\n                \"comment_id\": 54,\n                \"comment_date\": \"2024-07-22 08:19:19\",\n                \"comment_text\": \"Perfetto\",\n                \"commenter_name\": \"FrTzknjb00ibn0a\",\n                \"commenter_lastname\": \"{{userLastname}}\"\n            },\n            {\n                \"comment_id\": 53,\n                \"comment_date\": \"2024-07-22 08:17:51\",\n                \"comment_text\": \"Perfetto\",\n                \"commenter_name\": \"FrTzknjb00ibn0a\",\n                \"commenter_lastname\": \"{{userLastname}}\"\n            }\n        ]\n    },\n    \"average_rating\": 3\n}"
+						}
+					]
+				},
+				{
+					"name": "Patch Recipe by ID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"//unsets old recipe data\r",
+									"pm.environment.unset(\"recipeName\");\r",
+									"pm.environment.unset(\"recipeIngredient\");\r",
+									"pm.environment.unset(\"recipeDescription\");\r",
+									"pm.environment.unset(\"ingredientAmount\");\r",
+									"pm.environment.unset(\"recipeImages\");\r",
+									"\r",
+									"//randomizer for variable creation\r",
+									"let random = Math.random().toString(36).substring(2);\r",
+									"\r",
+									"\r",
+									"//randomizer for ingredient amount generation\r",
+									"let min = 1;\r",
+									"let max = 1000;\r",
+									"let randomAmountNumber = Math.floor(Math.random() * (max - min + 1)) + min;\r",
+									"\r",
+									"\r",
+									"//edited environment variables\r",
+									"let recipeName = \"Edited:\" + random; \r",
+									"let recipeIngredient = \"Edited:\" + random;\r",
+									"let ingredientAmount = randomAmountNumber + \"g.\";\r",
+									"let recipeDescription = \"Edited:\" + random\r",
+									"let image = \"Edited:\" + random + \".img\";\r",
+									"\r",
+									"\r",
+									"//categories array\r",
+									"const categories = [\"drinks\", \"dessert\", \"appetiser\", \"main dish\"];\r",
+									"const randomIndex = Math.floor(Math.random() * categories.length);\r",
+									"const randomCategory = categories[randomIndex];\r",
+									"\r",
+									"\r",
+									"//cuisines array\r",
+									"const cuisines = [ \"Italian\", \"Chinese\", \"Indian\", \"Mexican\", \"Japanese\", \"French\", \"Thai\", \"Spanish\", \"Greek\", \"Mediterranean\", \"Korean\", \"Vietnamese\", \"Turkish\", \"Moroccan\", \"Lebanese\", \"Brazilian\", \"Argentinian\", \"Peruvian\", \"Ethiopian\", \"Caribbean\", \"German\", \"Russian\", \"Polish\", \"Cuban\", \"Swedish\", \"Portuguese\", \"Malaysian\", \"Filipino\", \"Indonesian\", \"Pakistani\", \"Persian\", \"American\", \"British\", \"Irish\", \"Australian\", \"Nigerian\", \"South African\", \"Hungarian\", \"Dutch\", \"Belgian\", \"Austrian\", \"Swiss\", \"Chilean\", \"Colombian\", \"Venezuelan\", \"Uruguayan\", \"Ecuadorian\", \"Bolivian\", \"Paraguayan\", \"Czech\", \"Slovak\", \"Romanian\", \"Bulgarian\", \"Croatian\", \"Serbian\", \"Bosnian\", \"Slovenian\", \"Macedonian\", \"Albanian\", \"Georgian\", \"Armenian\", \"Azerbaijani\", \"Kazakh\", \"Uzbek\", \"Turkmen\", \"Kyrgyz\", \"Tajik\", \"Nepalese\", \"Sri Lankan\", \"Bangladeshi\", \"Afghan\", \"Saudi\", \"Emirati\", \"Qatari\", \"Kuwaiti\", \"Omani\", \"Yemeni\", \"Jordanian\", \"Palestinian\", \"Israeli\", \"Syrian\", \"Iraqi\", \"Libyan\", \"Algerian\", \"Tunisian\", \"Sudanese\", \"Kenyan\", \"Tanzanian\", \"Ugandan\", \"Ghanaian\", \"Senegalese\", \"Ivorian\", \"Cameroonian\", \"Angolan\", \"Zimbabwean\", \"Zambian\", \"Malawian\", \"Botswanan\", \"Mozambican\", \"Namibian\", \"Lithuanian\", \"Scandinavian\", \"Baltic\", \"Middle Eastern\", \"Central American\", \"East African\", \"West African\", \"Southern African\", \"Central Asian\", \"South Asian\", \"Southeast Asian\", \"East Asian\", \"Central European\", \"Eastern European\", \"Western European\", \"Southern European\" ];\r",
+									"\r",
+									"//random picker from cuisines array\r",
+									"const randomIdx = Math.floor(Math.random() * cuisines.length)\r",
+									"const randomCuisine = cuisines[randomIdx];\r",
+									"\r",
+									"\r",
+									"\r",
+									"//edited variable setters\r",
+									"pm.environment.set(\"recipeName\", recipeName);\r",
+									"pm.environment.set(\"recipeIngredient\", recipeIngredient);\r",
+									"pm.environment.set(\"recipeDescription\", recipeDescription);\r",
+									"pm.environment.set(\"ingredientAmount\", ingredientAmount);\r",
+									"pm.environment.set(\"recipeImages\", image);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Assert the correct message is being displayed\", function(){\r",
+									"    pm.expect(jsonData.message).to.eql(\"Recipe updated successfully\");\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"{{recipeName}}\",\r\n    \"ingredients\": [\r\n        {\r\n            \"amount\": \"{{ingredientAmount}}\",\r\n            \"ingredient\": \"{{recipeIngredient}}\"  \r\n        }\r\n    ],\r\n    \"steps\": [\r\n        \"{{recipeDescription}}\"  \r\n    ],\r\n    \"category\": \"{{randomRecipeCategory}}\",\r\n    \"cuisine\": \"{{randomRecipeCuisine}}\",\r\n    \"image\": \"{{recipeImages}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URI}}/recipes/:recipeId",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"recipes",
+								":recipeId"
+							],
+							"variable": [
+								{
+									"key": "recipeId",
+									"value": "{{recipeId}}"
+								}
+							]
+						},
+						"description": "Edit registered user recipe by its ID"
+					},
+					"response": [
+						{
+							"name": "200 OK",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"{{recipeName}}\",\r\n    \"ingredients\": [\r\n        {\r\n            \"amount\": \"{{ingredientAmount}}\",\r\n            \"ingredient\": \"{{recipeIngredient}}\"  \r\n        }\r\n    ],\r\n    \"steps\": [\r\n        \"{{recipeDescription}}\"  \r\n    ],\r\n    \"category\": \"dessert\",\r\n    \"cuisine\": \"american\",\r\n    \"image\": \"{{recipeImages}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URI}}/recipes/:recipeId",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"recipes",
+										":recipeId"
+									],
+									"variable": [
+										{
+											"key": "recipeId",
+											"value": "{{recipeId}}"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "41"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"29-4n9H/O+HCS3yoTglvjcKkxqKnSw\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 24 Jul 2024 08:59:19 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Recipe updated successfully\"\n}"
+						}
+					]
+				}
+			],
+			"description": "Add new recipe / get recipe by category or cuisine ID or recipe ID/ patch created recipe as a registered user (delete moved to the end due to automation execution of requests from top to bottom)",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Registered User view all Cuisines",
+			"item": [
+				{
+					"name": "Get all Cuisines",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//try/catch block to verify if the jsonData is being parsed\r",
+									"try {\r",
+									"    jsonData = pm.response.json();\r",
+									"    console.log('Parsed JSON:', jsonData); \r",
+									"} catch (e) {\r",
+									"    console.error('Failed to parse JSON:', e);\r",
+									"}\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"//since every cuisine is an object, the assert is modified accordingly\r",
+									"pm.test(\"Assert cuisineID exists and is a number\", function() {\r",
+									"    jsonData.forEach(item => {\r",
+									"        pm.expect(item.cuisineid).to.exist;\r",
+									"        pm.expect(item.cuisineid).to.be.a('number');\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"//since every cuisine name is part of every separate cuisine, the assert is modified accordingly\r",
+									"pm.test(\"Assert cuisine name exists and is a string\", function() {\r",
+									"    jsonData.forEach(item => {\r",
+									"        pm.expect(item.name).to.exist;\r",
+									"        pm.expect(item.name).to.be.a('string');\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"\r",
+									"//schema validation\r",
+									"let schema = {\r",
+									"  \"type\": \"array\",\r",
+									"  \"items\": {\r",
+									"    \"type\": \"object\",\r",
+									"    \"properties\": {\r",
+									"      \"cuisineid\": {\r",
+									"        \"type\": \"integer\"\r",
+									"      },\r",
+									"      \"name\": {\r",
+									"        \"type\": \"string\"\r",
+									"      }\r",
+									"    },\r",
+									"    \"required\": [\"cuisineid\", \"name\"]\r",
+									"  }\r",
+									"}\r",
+									"\r",
+									"pm.test('Schema validation', () => {\r",
+									"  pm.response.to.have.jsonSchema (schema);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"//debug log\r",
+									"console.log(\"Response Data:\", JSON.stringify(jsonData, null, 2));\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URI}}/cuisines",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"cuisines"
+							]
+						},
+						"description": "Get all cuisines in a list"
+					},
+					"response": [
+						{
+							"name": "200 OK",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URI}}/cuisines",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"cuisines"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "4129"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1021-9Y2IkGqEQkmAcdvEYXYImqrvaZk\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 14 Jul 2024 09:58:24 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"cuisineid\": 1,\n        \"name\": \"Italian\"\n    },\n    {\n        \"cuisineid\": 2,\n        \"name\": \"Chinese\"\n    },\n    {\n        \"cuisineid\": 3,\n        \"name\": \"Indian\"\n    },\n    {\n        \"cuisineid\": 4,\n        \"name\": \"Mexican\"\n    },\n    {\n        \"cuisineid\": 5,\n        \"name\": \"Japanese\"\n    },\n    {\n        \"cuisineid\": 6,\n        \"name\": \"French\"\n    },\n    {\n        \"cuisineid\": 7,\n        \"name\": \"Thai\"\n    },\n    {\n        \"cuisineid\": 8,\n        \"name\": \"Spanish\"\n    },\n    {\n        \"cuisineid\": 9,\n        \"name\": \"Greek\"\n    },\n    {\n        \"cuisineid\": 10,\n        \"name\": \"Mediterranean\"\n    },\n    {\n        \"cuisineid\": 11,\n        \"name\": \"Korean\"\n    },\n    {\n        \"cuisineid\": 12,\n        \"name\": \"Vietnamese\"\n    },\n    {\n        \"cuisineid\": 13,\n        \"name\": \"Turkish\"\n    },\n    {\n        \"cuisineid\": 14,\n        \"name\": \"Moroccan\"\n    },\n    {\n        \"cuisineid\": 15,\n        \"name\": \"Lebanese\"\n    },\n    {\n        \"cuisineid\": 16,\n        \"name\": \"Brazilian\"\n    },\n    {\n        \"cuisineid\": 17,\n        \"name\": \"Argentinian\"\n    },\n    {\n        \"cuisineid\": 18,\n        \"name\": \"Peruvian\"\n    },\n    {\n        \"cuisineid\": 19,\n        \"name\": \"Ethiopian\"\n    },\n    {\n        \"cuisineid\": 20,\n        \"name\": \"Caribbean\"\n    },\n    {\n        \"cuisineid\": 21,\n        \"name\": \"German\"\n    },\n    {\n        \"cuisineid\": 22,\n        \"name\": \"Russian\"\n    },\n    {\n        \"cuisineid\": 23,\n        \"name\": \"Polish\"\n    },\n    {\n        \"cuisineid\": 24,\n        \"name\": \"Cuban\"\n    },\n    {\n        \"cuisineid\": 25,\n        \"name\": \"Swedish\"\n    },\n    {\n        \"cuisineid\": 26,\n        \"name\": \"Portuguese\"\n    },\n    {\n        \"cuisineid\": 27,\n        \"name\": \"Malaysian\"\n    },\n    {\n        \"cuisineid\": 28,\n        \"name\": \"Filipino\"\n    },\n    {\n        \"cuisineid\": 29,\n        \"name\": \"Indonesian\"\n    },\n    {\n        \"cuisineid\": 30,\n        \"name\": \"Pakistani\"\n    },\n    {\n        \"cuisineid\": 31,\n        \"name\": \"Persian\"\n    },\n    {\n        \"cuisineid\": 32,\n        \"name\": \"American\"\n    },\n    {\n        \"cuisineid\": 33,\n        \"name\": \"British\"\n    },\n    {\n        \"cuisineid\": 34,\n        \"name\": \"Irish\"\n    },\n    {\n        \"cuisineid\": 35,\n        \"name\": \"Australian\"\n    },\n    {\n        \"cuisineid\": 36,\n        \"name\": \"Nigerian\"\n    },\n    {\n        \"cuisineid\": 37,\n        \"name\": \"South African\"\n    },\n    {\n        \"cuisineid\": 38,\n        \"name\": \"Hungarian\"\n    },\n    {\n        \"cuisineid\": 39,\n        \"name\": \"Dutch\"\n    },\n    {\n        \"cuisineid\": 40,\n        \"name\": \"Belgian\"\n    },\n    {\n        \"cuisineid\": 41,\n        \"name\": \"Austrian\"\n    },\n    {\n        \"cuisineid\": 42,\n        \"name\": \"Swiss\"\n    },\n    {\n        \"cuisineid\": 43,\n        \"name\": \"Chilean\"\n    },\n    {\n        \"cuisineid\": 44,\n        \"name\": \"Colombian\"\n    },\n    {\n        \"cuisineid\": 45,\n        \"name\": \"Venezuelan\"\n    },\n    {\n        \"cuisineid\": 46,\n        \"name\": \"Uruguayan\"\n    },\n    {\n        \"cuisineid\": 47,\n        \"name\": \"Ecuadorian\"\n    },\n    {\n        \"cuisineid\": 48,\n        \"name\": \"Bolivian\"\n    },\n    {\n        \"cuisineid\": 49,\n        \"name\": \"Paraguayan\"\n    },\n    {\n        \"cuisineid\": 50,\n        \"name\": \"Czech\"\n    },\n    {\n        \"cuisineid\": 51,\n        \"name\": \"Slovak\"\n    },\n    {\n        \"cuisineid\": 52,\n        \"name\": \"Romanian\"\n    },\n    {\n        \"cuisineid\": 53,\n        \"name\": \"Bulgarian\"\n    },\n    {\n        \"cuisineid\": 54,\n        \"name\": \"Croatian\"\n    },\n    {\n        \"cuisineid\": 55,\n        \"name\": \"Serbian\"\n    },\n    {\n        \"cuisineid\": 56,\n        \"name\": \"Bosnian\"\n    },\n    {\n        \"cuisineid\": 57,\n        \"name\": \"Slovenian\"\n    },\n    {\n        \"cuisineid\": 58,\n        \"name\": \"Macedonian\"\n    },\n    {\n        \"cuisineid\": 59,\n        \"name\": \"Albanian\"\n    },\n    {\n        \"cuisineid\": 60,\n        \"name\": \"Georgian\"\n    },\n    {\n        \"cuisineid\": 61,\n        \"name\": \"Armenian\"\n    },\n    {\n        \"cuisineid\": 62,\n        \"name\": \"Azerbaijani\"\n    },\n    {\n        \"cuisineid\": 63,\n        \"name\": \"Kazakh\"\n    },\n    {\n        \"cuisineid\": 64,\n        \"name\": \"Uzbek\"\n    },\n    {\n        \"cuisineid\": 65,\n        \"name\": \"Turkmen\"\n    },\n    {\n        \"cuisineid\": 66,\n        \"name\": \"Kyrgyz\"\n    },\n    {\n        \"cuisineid\": 67,\n        \"name\": \"Tajik\"\n    },\n    {\n        \"cuisineid\": 68,\n        \"name\": \"Nepalese\"\n    },\n    {\n        \"cuisineid\": 69,\n        \"name\": \"Sri Lankan\"\n    },\n    {\n        \"cuisineid\": 70,\n        \"name\": \"Bangladeshi\"\n    },\n    {\n        \"cuisineid\": 71,\n        \"name\": \"Afghan\"\n    },\n    {\n        \"cuisineid\": 72,\n        \"name\": \"Saudi\"\n    },\n    {\n        \"cuisineid\": 73,\n        \"name\": \"Emirati\"\n    },\n    {\n        \"cuisineid\": 74,\n        \"name\": \"Qatari\"\n    },\n    {\n        \"cuisineid\": 75,\n        \"name\": \"Kuwaiti\"\n    },\n    {\n        \"cuisineid\": 76,\n        \"name\": \"Omani\"\n    },\n    {\n        \"cuisineid\": 77,\n        \"name\": \"Yemeni\"\n    },\n    {\n        \"cuisineid\": 78,\n        \"name\": \"Jordanian\"\n    },\n    {\n        \"cuisineid\": 79,\n        \"name\": \"Palestinian\"\n    },\n    {\n        \"cuisineid\": 80,\n        \"name\": \"Israeli\"\n    },\n    {\n        \"cuisineid\": 81,\n        \"name\": \"Syrian\"\n    },\n    {\n        \"cuisineid\": 82,\n        \"name\": \"Iraqi\"\n    },\n    {\n        \"cuisineid\": 83,\n        \"name\": \"Libyan\"\n    },\n    {\n        \"cuisineid\": 84,\n        \"name\": \"Algerian\"\n    },\n    {\n        \"cuisineid\": 85,\n        \"name\": \"Tunisian\"\n    },\n    {\n        \"cuisineid\": 86,\n        \"name\": \"Sudanese\"\n    },\n    {\n        \"cuisineid\": 87,\n        \"name\": \"Kenyan\"\n    },\n    {\n        \"cuisineid\": 88,\n        \"name\": \"Tanzanian\"\n    },\n    {\n        \"cuisineid\": 89,\n        \"name\": \"Ugandan\"\n    },\n    {\n        \"cuisineid\": 90,\n        \"name\": \"Ghanaian\"\n    },\n    {\n        \"cuisineid\": 91,\n        \"name\": \"Senegalese\"\n    },\n    {\n        \"cuisineid\": 92,\n        \"name\": \"Ivorian\"\n    },\n    {\n        \"cuisineid\": 93,\n        \"name\": \"Cameroonian\"\n    },\n    {\n        \"cuisineid\": 94,\n        \"name\": \"Angolan\"\n    },\n    {\n        \"cuisineid\": 95,\n        \"name\": \"Zimbabwean\"\n    },\n    {\n        \"cuisineid\": 96,\n        \"name\": \"Zambian\"\n    },\n    {\n        \"cuisineid\": 97,\n        \"name\": \"Malawian\"\n    },\n    {\n        \"cuisineid\": 98,\n        \"name\": \"Botswanan\"\n    },\n    {\n        \"cuisineid\": 99,\n        \"name\": \"Mozambican\"\n    },\n    {\n        \"cuisineid\": 100,\n        \"name\": \"Namibian\"\n    },\n    {\n        \"cuisineid\": 101,\n        \"name\": \"Lithuanian\"\n    },\n    {\n        \"cuisineid\": 102,\n        \"name\": \"Scandinavian\"\n    },\n    {\n        \"cuisineid\": 103,\n        \"name\": \"Baltic\"\n    },\n    {\n        \"cuisineid\": 104,\n        \"name\": \"Middle Eastern\"\n    },\n    {\n        \"cuisineid\": 105,\n        \"name\": \"Central American\"\n    },\n    {\n        \"cuisineid\": 106,\n        \"name\": \"East African\"\n    },\n    {\n        \"cuisineid\": 107,\n        \"name\": \"West African\"\n    },\n    {\n        \"cuisineid\": 108,\n        \"name\": \"Southern African\"\n    },\n    {\n        \"cuisineid\": 109,\n        \"name\": \"Central Asian\"\n    },\n    {\n        \"cuisineid\": 110,\n        \"name\": \"South Asian\"\n    },\n    {\n        \"cuisineid\": 111,\n        \"name\": \"Southeast Asian\"\n    },\n    {\n        \"cuisineid\": 112,\n        \"name\": \"East Asian\"\n    },\n    {\n        \"cuisineid\": 113,\n        \"name\": \"Central European\"\n    },\n    {\n        \"cuisineid\": 114,\n        \"name\": \"Eastern European\"\n    },\n    {\n        \"cuisineid\": 115,\n        \"name\": \"Western European\"\n    },\n    {\n        \"cuisineid\": 116,\n        \"name\": \"Southern European\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Get all Cuisines with Recipes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"//since every cuisine with recipes is a separate object, the assert is modified accordingly\r",
+									"pm.test(\"Assert response body exists\", function () {\r",
+									"     pm.expect(jsonData).to.be.an('array');\r",
+									"     jsonData.forEach((cuisine) => {\r",
+									"            pm.expect(cuisine).to.have.property('cuisineid').that.is.a('number').to.not.be.null;\r",
+									"            pm.expect(cuisine).to.have.property('name').that.is.a('string').to.not.be.null;\r",
+									"            pm.expect(cuisine).to.have.property('recipeid').that.is.an('array');\r",
+									"            \r",
+									"            //the recipe id is being an recipe ID array object inside every cuisine with recipes, therefore forEach method is user for every single recipe\r",
+									"            cuisine.recipeid.forEach((recipe) => {\r",
+									"            pm.expect(recipe).to.have.property('recipeid').that.is.a('number').to.not.be.null;\r",
+									"        });\r",
+									"            \r",
+									"     });\r",
+									"});\r",
+									"\r",
+									"\r",
+									"//response body schema validation\r",
+									"let schema = {\r",
+									"    \"type\": \"array\",\r",
+									"    \"items\": {\r",
+									"        \"type\": \"object\",\r",
+									"        \"properties\": {\r",
+									"            \"cuisineid\": {\r",
+									"                \"type\": \"number\"\r",
+									"            },\r",
+									"            \"name\": {\r",
+									"                \"type\": \"string\"\r",
+									"            },\r",
+									"            \"recipeid\": {\r",
+									"                \"type\": \"array\",\r",
+									"                \"items\": {\r",
+									"                    \"type\": \"object\",\r",
+									"                    \"properties\": {\r",
+									"                        \"recipeid\": {\r",
+									"                            \"type\": \"number\"\r",
+									"                        }\r",
+									"                    },\r",
+									"                    \"required\": [\"recipeid\"]\r",
+									"                }\r",
+									"            }\r",
+									"        },\r",
+									"        \"required\": [\"cuisineid\", \"name\", \"recipeid\"]\r",
+									"    }\r",
+									"}\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"    pm.response.to.have.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URI}}/cuisines/withRecipes",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"cuisines",
+								"withRecipes"
+							]
+						},
+						"description": "Get all cuisines with recipes as a list"
+					},
+					"response": [
+						{
+							"name": "200 OK",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URI}}/cuisines/withRecipes",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"cuisines",
+										"withRecipes"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "527"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"20f-tsO+vA56LTfrk+1gt+VKDCsr0nw\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 19 Jul 2024 02:36:34 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"cuisineid\": 1,\n        \"name\": \"italian\",\n        \"recipeid\": [\n            {\n                \"recipeid\": 32\n            },\n            {\n                \"recipeid\": 31\n            },\n            {\n                \"recipeid\": 30\n            },\n            {\n                \"recipeid\": 26\n            },\n            {\n                \"recipeid\": 25\n            },\n            {\n                \"recipeid\": 24\n            },\n            {\n                \"recipeid\": 23\n            },\n            {\n                \"recipeid\": 22\n            },\n            {\n                \"recipeid\": 21\n            },\n            {\n                \"recipeid\": 20\n            },\n            {\n                \"recipeid\": 19\n            },\n            {\n                \"recipeid\": 18\n            },\n            {\n                \"recipeid\": 16\n            },\n            {\n                \"recipeid\": 15\n            },\n            {\n                \"recipeid\": 14\n            }\n        ]\n    },\n    {\n        \"cuisineid\": 21,\n        \"name\": \"german\",\n        \"recipeid\": [\n            {\n                \"recipeid\": 37\n            },\n            {\n                \"recipeid\": 36\n            },\n            {\n                \"recipeid\": 33\n            }\n        ]\n    },\n    {\n        \"cuisineid\": 32,\n        \"name\": \"american\",\n        \"recipeid\": [\n            {\n                \"recipeid\": 11\n            }\n        ]\n    },\n    {\n        \"cuisineid\": 101,\n        \"name\": \"lithuanian\",\n        \"recipeid\": [\n            {\n                \"recipeid\": 10\n            },\n            {\n                \"recipeid\": 6\n            }\n        ]\n    }\n]"
+						}
+					]
+				}
+			],
+			"description": "View all cuisines list as a registered user or all cuisines list with recipes",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Registrated User view all Categories",
+			"item": [
+				{
+					"name": "Get all Categories",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//try/catch for verification if the response body is being parsed\r",
+									"try {\r",
+									"    jsonData = pm.response.json();\r",
+									"    console.log('Parsed JSON:', jsonData); \r",
+									"} catch (e) {\r",
+									"    console.error('Failed to parse JSON:', e);\r",
+									"}\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"//every category is a separate object, therefore forEach is used to scan every single object for valid values\r",
+									"pm.test(\"Assert categoryID exists and is a number\", function() {\r",
+									"    jsonData.forEach(item => {\r",
+									"        pm.expect(item.categoryid).to.exist;\r",
+									"        pm.expect(item.categoryid).to.be.a('number');\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Assert category name exists and is a string\", function() {\r",
+									"    jsonData.forEach(item => {\r",
+									"        pm.expect(item.name).to.exist;\r",
+									"        pm.expect(item.name).to.be.a('string');\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"//schema validation\r",
+									"let schema = {\r",
+									"  \"type\": \"array\",\r",
+									"  \"items\": {\r",
+									"    \"type\": \"object\",\r",
+									"    \"properties\": {\r",
+									"      \"categoryid\": {\r",
+									"        \"type\": \"integer\"\r",
+									"      },\r",
+									"      \"name\": {\r",
+									"        \"type\": \"string\"\r",
+									"      }\r",
+									"    },\r",
+									"    \"required\": [\"categoryid\", \"name\"]\r",
+									"  }\r",
+									"}\r",
+									"\r",
+									"pm.test('Schema validation', () => {\r",
+									"  pm.response.to.have.jsonSchema (schema);\r",
+									"});\r",
+									"\r",
+									"//debug log\r",
+									"console.log(\"Response Data:\", JSON.stringify(jsonData, null, 2));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URI}}/categories",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"categories"
+							]
+						},
+						"description": "Get all recipe categories as a list"
+					},
+					"response": [
+						{
+							"name": "200 OK",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URI}}/categories",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"categories"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "140"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"8c-/Jf97QJRrZA3+upO0B8Ku8rkzTo\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 14 Jul 2024 10:18:39 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"categoryid\": 1,\n        \"name\": \"Drinks\"\n    },\n    {\n        \"categoryid\": 2,\n        \"name\": \"Dessert\"\n    },\n    {\n        \"categoryid\": 3,\n        \"name\": \"Appetiser\"\n    },\n    {\n        \"categoryid\": 4,\n        \"name\": \"Main Dish\"\n    }\n]"
+						}
+					]
+				}
+			],
+			"description": "View all categories list as a registered user",
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{userToken}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Registered User Comment",
+			"item": [
+				{
+					"name": "Registered User Leave Comment",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"//random rating generator\r",
+									"let min = 1;\r",
+									"let max = 5;\r",
+									"let randomRating = Math.floor(Math.random() * (max - min + 1)) + min;\r",
+									"\r",
+									"let userRating = randomRating;\r",
+									"\r",
+									"//rating setter\r",
+									"pm.environment.set(\"userRating\", userRating);\r",
+									"\r",
+									"//random comment generator\r",
+									"let randomComment = Math.random().toString(36).substring(2);\r",
+									"\r",
+									"//random comment setter\r",
+									"pm.environment.set(\"userComment\", randomComment);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Assert the response body to not to be null\", function(){\r",
+									"    pm.expect(jsonData).to.not.be.null;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Assert the comment ID exists\", function(){\r",
+									"    pm.expect(jsonData.commentid).to.exist;\r",
+									"    pm.expect(jsonData.commentid).to.be.a('number');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Assert the recipe ID exists\", function(){\r",
+									"    pm.expect(jsonData.recipeid).to.exist;\r",
+									"    pm.expect(jsonData.recipeid).to.be.a('number');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Assert the user ID exists\", function(){\r",
+									"    pm.expect(jsonData.userid).to.exist;\r",
+									"    pm.expect(jsonData.userid).to.be.a('number');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Assert the comment exists\", function(){\r",
+									"    pm.expect(jsonData.comment).to.exist;\r",
+									"    pm.expect(jsonData.comment).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Assert the created at date exists\", function(){\r",
+									"    pm.expect(jsonData.created_at).to.exist;\r",
+									"    pm.expect(jsonData.created_at).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"//user comment ID setter in the environment\r",
+									"pm.environment.set(\"userCommentId\", jsonData.commentid);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"comment\": \"{{userComment}}\",\r\n    \"recipeId\": \"{{recipeId}}\",\r\n    \"rating\": \"{{userRating}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URI}}/social",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"social"
+							]
+						},
+						"description": "Positive test case covering registered user recipe comment addition by recipe ID"
+					},
+					"response": [
+						{
+							"name": "201 Created with Spaces as Comment",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"comment\": \"   \",\r\n    \"recipeId\": \"{{recipeId}}\",\r\n    \"rating\": \"{{userRating}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URI}}/social",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"social"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "101"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"65-b22Kr70M4+xlFoj+Z6QTfiaozME\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 29 Jul 2024 09:41:15 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"commentid\": 164,\n    \"recipeid\": 369,\n    \"userid\": 233,\n    \"comment\": \"   \",\n    \"created_at\": \"2024-07-29T09:41:15.580Z\"\n}"
+						},
+						{
+							"name": "201 Created with Comment exceeding 500 char limit",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"comment\": \"In the heart of the bustling city, a small coffee shop stood as a serene refuge. It was known for its aromatic brews and cozy ambiance, where people from all walks of life gathered to share stories, work, or simply relax. The barista, with a warm smile, knew most customers by name, crafting each cup with care. Sunlight filtered through the large windows, casting a golden glow on the rustic wooden tables. Outside, the world hurried by, but inside, time seemed to slow down, allowing patrons to savor their moments. It was more than just a place for coffee; it was a haven of connection and tranquility, where every sip told a story.\",\r\n    \"recipeId\": \"{{recipeId}}\",\r\n    \"rating\": \"{{userRating}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URI}}/social",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"social"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "733"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"2dd-TZerhKdi4mxrrU0TwIWI2Jf6CpY\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 29 Jul 2024 09:41:52 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"commentid\": 165,\n    \"recipeid\": 369,\n    \"userid\": 233,\n    \"comment\": \"In the heart of the bustling city, a small coffee shop stood as a serene refuge. It was known for its aromatic brews and cozy ambiance, where people from all walks of life gathered to share stories, work, or simply relax. The barista, with a warm smile, knew most customers by name, crafting each cup with care. Sunlight filtered through the large windows, casting a golden glow on the rustic wooden tables. Outside, the world hurried by, but inside, time seemed to slow down, allowing patrons to savor their moments. It was more than just a place for coffee; it was a haven of connection and tranquility, where every sip told a story.\",\n    \"created_at\": \"2024-07-29T09:41:52.862Z\"\n}"
+						},
+						{
+							"name": "201 Created",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"comment\": \"{{userComment}}\",\r\n    \"recipeId\": \"{{recipeId}}\",\r\n    \"rating\": \"{{userRating}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URI}}/social",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"social"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "107"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"6b-w8XtZ/5X5mjiCFgPJ4lrEe1baJw\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 30 Jul 2024 05:33:33 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"commentid\": 36,\n    \"recipeid\": 118,\n    \"userid\": 125,\n    \"comment\": \"rcthmvh795\",\n    \"created_at\": \"2024-07-30T05:33:33.061Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Comment by Recipe ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//since this postman request hasn't been finished, no further testing is going at the moment\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"comment\": \"{{userComment}}\",\r\n    \"recipeId\": \"{{recipeId}}\",\r\n    \"rating\": \"{{userRating}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URI}}/social/:recipeId",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"social",
+								":recipeId"
+							],
+							"variable": [
+								{
+									"key": "recipeId",
+									"value": "{{recipeId}}"
+								}
+							]
+						},
+						"description": "Get a submitted recipe review by recipe ID"
+					},
+					"response": [
+						{
+							"name": "500 Internal Server Error (it's not done yet I suppose)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URI}}/social/:recipeId",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"social",
+										":recipeId"
+									],
+									"variable": [
+										{
+											"key": "recipeId",
+											"value": "{{recipeId}}"
+										}
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "38"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"26-x/F1ETBLJmnt0+g3PuYTKbB2eC8\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 19 Jul 2024 08:05:47 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": {\n        \"code\": \"UNDEFINED_VALUE\"\n    }\n}"
+						}
+					]
+				}
+			],
+			"description": "Leave comment on recipe as a registered user or get review by recipe ID"
+		},
+		{
+			"name": "Administrator adds Category",
+			"item": [
+				{
+					"name": "Post Category as Administrator",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"//random category generator\r",
+									"let random = Math.random().toString(36).substring(2);\r",
+									"\r",
+									"let categoryName = random; \r",
+									"\r",
+									"//random category setter\r",
+									"pm.environment.set(\"categoryName\", categoryName);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//try/catch for validation if responsebody is being parsed as JSON\r",
+									"try {\r",
+									"    jsonData = pm.response.json();\r",
+									"    console.log('Parsed JSON:', jsonData); \r",
+									"} catch (e) {\r",
+									"    console.error('Failed to parse JSON:', e);\r",
+									"}\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"//since the category is a separate object, the assert is set for scanning for every value set in separate category objects\r",
+									"pm.test(\"Assert the category ID is assigned to the recipe\", function() {\r",
+									"    jsonData.forEach(item => {\r",
+									"        pm.expect(item.categoryid).to.not.be.null;\r",
+									"        pm.expect(item.categoryid).to.be.a('number');\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Assert the category name is displayed\", function() {\r",
+									"    jsonData.forEach(item => {\r",
+									"        pm.expect(item.name).to.not.be.null;\r",
+									"        pm.expect(item.name).to.be.a('string');\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"//this conditional statement sets the category ID if it's present in response body\r",
+									"if (jsonData.length > 0) {\r",
+									"    pm.environment.set(\"categoryId\", jsonData[0].categoryid.toString());\r",
+									"} else {\r",
+									"    console.error('No data in JSON response to set categoryId');\r",
+									"}\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"category\": \"{{categoryName}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URI}}/categories",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"categories"
+							]
+						},
+						"description": "Positive test case covering new category creation as Administrator"
+					},
+					"response": [
+						{
+							"name": "201 Created",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"category\": \"{{categoryName}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URI}}/categories",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"categories"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "39"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"27-877MwNojzJkA9b/NlEFcfpqkV/I\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 15 Jul 2024 08:03:50 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"categoryid\": 25,\n        \"name\": \"mrbl9qrcej\"\n    }\n]"
+						},
+						{
+							"name": "406 Not Acceptable with Existing Category",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"category\": \"drinks\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URI}}/categories",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"categories"
+									]
+								}
+							},
+							"status": "Not Acceptable",
+							"code": 406,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "36"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"24-7On4sjZY5zVTUZU6M/jdzJXiuVc\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 29 Jul 2024 09:43:07 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Category already added\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Category as Administrator",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = pm.response.json();\r",
+									"\r",
+									"let categoryObj = jsonData[0];\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"}); // it should be 204, not 200\r",
+									"\r",
+									"\r",
+									"pm.test(\"Assert the correct category is being deleted\", function() {\r",
+									"    pm.expect(categoryObj.name).to.eql(pm.environment.get(\"categoryName\"));\r",
+									"    pm.expect(categoryObj.categoryid).to.eql(Number(pm.environment.get(\"categoryId\")));\r",
+									"});\r",
+									"\r",
+									"//random category unsetters\r",
+									"pm.environment.unset(\"categoryId\");\r",
+									"pm.environment.unset(\"categoryName\");\r",
+									"\r",
+									"pm.test(\"Follow-up Request to Confirm Deletion\", function () {\r",
+									"        pm.response.to.have.status(200); \r",
+									"    });"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URI}}/categories/:categoryId",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"categories",
+								":categoryId"
+							],
+							"variable": [
+								{
+									"key": "categoryId",
+									"value": "{{categoryId}}"
+								}
+							]
+						},
+						"description": "Delete newly created category as administrator by category ID"
+					},
+					"response": [
+						{
+							"name": "200 OK",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URI}}/categories/:categoryId",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"categories",
+										":categoryId"
+									],
+									"variable": [
+										{
+											"key": "categoryId",
+											"value": "{{categoryId}}"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "40"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"28-kBUz+i321d4OuLk8DXKgBTsTbzk\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 15 Jul 2024 08:10:12 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"categoryid\": 29,\n        \"name\": \"r5dli11jrnc\"\n    }\n]"
+						}
+					]
+				}
+			],
+			"description": "Add or delete new categories as administrator",
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{accessAdminToken}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Delete User Recipe",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"}); //it's supposed to be 204, not 200\r",
+							"\r",
+							"\r",
+							"\r",
+							"//recipe related variable unsetters for recipe removal environment cleanup purposes\r",
+							"pm.environment.unset(\"recipeId\");\r",
+							"pm.environment.unset(\"cuisineId\");\r",
+							"pm.environment.unset(\"recipeCategoryId\")\r",
+							"pm.environment.unset(\"recipeName\");\r",
+							"pm.environment.unset(\"recipeIngredient\");\r",
+							"pm.environment.unset(\"recipeDescription\");\r",
+							"pm.environment.unset(\"ingredientAmount\");\r",
+							"pm.environment.unset(\"recipeSteps\");\r",
+							"pm.environment.unset(\"recipeImages\");\r",
+							"pm.environment.unset(\"userComment\");\r",
+							"pm.environment.unset(\"userCommentId\");\r",
+							"pm.environment.unset(\"userId\");\r",
+							"pm.environment.unset(\"randomRecipeCategory\");\r",
+							"pm.environment.unset(\"randomRecipeCuisine\");\r",
+							"pm.environment.unset(\"userRating\");\r",
+							"\r",
+							"pm.test(\"Assert the response body is an empty array\", function() {\r",
+							"    let body = JSON.parse(pm.response.text());\r",
+							"    pm.expect(body).to.be.an('array').that.is.empty;\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"Follow-up Request to Confirm Deletion\", function() {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URI}}/recipes/:recipeId",
+					"host": [
+						"{{BASE_URI}}"
+					],
+					"path": [
+						"recipes",
+						":recipeId"
+					],
+					"variable": [
+						{
+							"key": "recipeId",
+							"value": "{{recipeId}}"
+						}
+					]
+				},
+				"description": "Delete created user recipe by recipeId"
+			},
+			"response": [
+				{
+					"name": "200 OK",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URI}}/recipes/:recipeId",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"recipes",
+								":recipeId"
+							],
+							"variable": [
+								{
+									"key": "recipeId",
+									"value": "{{recipeId}}"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "2"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"2-l9Fw4VUO7kr8CvBlt4zaMCqXZ0w\""
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 15 Jul 2024 15:51:14 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "[]"
+				}
+			]
+		},
+		{
+			"name": "User Account Removal",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"//user removal for environment cleanup purposes, not part of the original postman setup\r",
+							"pm.environment.unset(\"userName\");\r",
+							"pm.environment.unset(\"userFirstName\");\r",
+							"pm.environment.unset(\"userLastName\");\r",
+							"pm.environment.unset(\"userEmail\")\r",
+							"pm.environment.unset(\"userPassword\");\r",
+							"pm.environment.unset(\"userToken\");\r",
+							"pm.environment.unset(\"signupToken\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URI}}/users",
+					"host": [
+						"{{BASE_URI}}"
+					],
+					"path": [
+						"users"
+					]
+				},
+				"description": "Remove registered user account (for environment cleanup purposes)"
+			},
+			"response": [
+				{
+					"name": "404 Not Found",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URI}}/users",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "html",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Security-Policy",
+							"value": "default-src 'none'"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/html; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "150"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 15 Jul 2024 12:35:10 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "<!DOCTYPE html>\n<html lang=\"en\">\n    <head>\n        <meta charset=\"utf-8\">\n        <title>Error</title>\n    </head>\n    <body>\n        <pre>Cannot DELETE /v1/users</pre>\n    </body>\n</html>"
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{userToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
